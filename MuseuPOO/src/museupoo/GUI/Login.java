@@ -6,12 +6,18 @@ package museupoo.GUI;
 
 
 
+import br.com.fatec.DAO.FuncionarioDAO;
 import br.com.fatec.DAO.LoginDAO;
 import br.com.fatec.banco.BancoFactory;
+import br.com.fatec.vo.FuncaoVO;
+import br.com.fatec.vo.FuncionarioVO;
 import br.com.fatec.vo.LoginVO;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import museupoo.Content;
 
 /**
  *
@@ -19,11 +25,16 @@ import java.util.List;
  */
 public class Login extends javax.swing.JFrame {
 
+    Content content;
+    
+    
     /**
      * Creates new form Login
      */
     public Login() {
-        initComponents();
+        initComponents(); 
+        
+        content = new Content(new BancoFactory("localhost", "museuautomovel", "root", "", 3306));
     }
 
     /**
@@ -45,6 +56,7 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
         setForeground(java.awt.Color.white);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -113,8 +125,34 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-        login();
+        LoginVO login;
+       if((login = login()) != null)
+       {
+           
+            try 
+            {
+                FuncionarioVO funcionario = content.funcionarioDAO.buscar(new FuncionarioVO(login.getIdLogin(),0,"","","","",""));
+                FuncaoVO funcao = content.funcaoDAO.buscar(new FuncaoVO(funcionario.getIdFuncao(),"",0));
+                funcionario.setLogin(login);
+                funcionario.setFuncao(funcao);
+                content.setFuncionarioAtual(funcionario);
+
+                
+                
+                //inicia menu principal 
+              MenuPrincipal menu =  new MenuPrincipal(content);
+              dispose();
+              menu.setVisible(true);
+              
+              
+            } catch (Exception ex)
+            {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                
+                
+            }
+       
+       }
         
         
         
@@ -147,14 +185,10 @@ public class Login extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+            /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                javax.swing.JFrame frame = new javax.swing.JFrame("Museu Automobilistico");
-                frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                frame.getContentPane().add(new Login());
-                frame.pack();
-                frame.setVisible(true);
+                new Login().setVisible(true);
             }
         });
         
@@ -172,7 +206,7 @@ public class Login extends javax.swing.JFrame {
 
     List<LoginVO> logins;
     
-    private boolean login() 
+    private LoginVO login() 
     {
         
         String loginTxt, senhaTxt;
@@ -186,23 +220,19 @@ public class Login extends javax.swing.JFrame {
         for(LoginVO l : logins)
         {
             if(l.getLogin().equals(loginTxt) && l.getSenha().equals(senhaTxt))
-                return true;
+                return l;
         }       
-        return false;
+        return null;
     }
     
     
-        Connection conexao = null;
-        BancoFactory bf = new BancoFactory("localhost", "museuautomovel", "root", "", 3306);
-        
         
     private void atualizaLogins() {
         
         
-        LoginDAO daoL = new LoginDAO(bf);
         try
         {
-           logins = daoL.lista(" Ativo = 1 ");
+           logins = content.loginDAO.lista(" Ativo = 1 ");
         }
         catch(Exception ex)
         {

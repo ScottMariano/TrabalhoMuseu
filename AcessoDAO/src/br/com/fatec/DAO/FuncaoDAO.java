@@ -78,7 +78,7 @@ public class FuncaoDAO implements DAO <FuncaoVO>{
             sql += "Privilegio = " + obj.getPrivilegio() + " | ";
                     
         if(sql.contains("|"))
-            sql = sql.substring(0, sql.length()-1);
+            sql = sql.substring(0, sql.length()-2);
               
           sql = sql.replace("|", "AND");
         //Criar o statement e abrir a conexao com o banco

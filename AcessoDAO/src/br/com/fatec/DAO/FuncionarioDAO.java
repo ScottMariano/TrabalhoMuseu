@@ -88,7 +88,7 @@ public class FuncionarioDAO implements DAO <FuncionarioVO>{
             sql += "Email like " + obj.getEmail()+ " | ";
                     
         if(sql.contains("|"))
-            sql = sql.substring(0, sql.length()-1);
+            sql = sql.substring(0, sql.length()-2);
               
           sql = sql.replace("|", "AND");
         //Criar o statement e abrir a conexao com o banco
