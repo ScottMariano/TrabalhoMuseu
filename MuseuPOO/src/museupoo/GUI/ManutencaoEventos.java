@@ -2,8 +2,23 @@
 
 package museupoo.GUI;
 
+import br.com.fatec.vo.EventoVO;
+import br.com.fatec.vo.ObraVO;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import museupoo.Content;
+import museupoo.UTIL.Util;
+
 public class ManutencaoEventos extends javax.swing.JFrame {
-    
+    Content content;
     /**
      * Creates new form ContactEditor
      */
@@ -11,7 +26,13 @@ public class ManutencaoEventos extends javax.swing.JFrame {
         initComponents();
         setFocusSequence();
       
-        
+            
+    }
+
+    ManutencaoEventos(Content content) {
+        this();
+        this.content = content;
+        carregaEventos();
     }
     
     /** This method is called from within the constructor to
@@ -41,11 +62,15 @@ public class ManutencaoEventos extends javax.swing.JFrame {
         txtTexto1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         cntMaxEntradas = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+        spnIni = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        spnFinal = new javax.swing.JSpinner();
         bttCancelar = new javax.swing.JButton();
         bttSalvar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("E-mail Contacts");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(" Eventos "));
@@ -72,6 +97,11 @@ public class ManutencaoEventos extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblEventos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEventosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblEventos);
@@ -108,7 +138,7 @@ public class ManutencaoEventos extends javax.swing.JFrame {
             }
         });
 
-        bttRemoverObras.setText("Remover");
+        bttRemoverObras.setText("Atualizar");
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -147,6 +177,14 @@ public class ManutencaoEventos extends javax.swing.JFrame {
 
         jLabel7.setText("Maximo de Entradas");
 
+        jLabel1.setText("Inicio:");
+
+        spnIni.setModel(new javax.swing.SpinnerDateModel());
+
+        jLabel2.setText("Final:");
+
+        spnFinal.setModel(new javax.swing.SpinnerDateModel());
+
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -165,19 +203,25 @@ public class ManutencaoEventos extends javax.swing.JFrame {
                             .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 259, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(12, 12, 12)
-                                .add(jLabel6)))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanel2Layout.createSequentialGroup()
-                                .add(jLabel3)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(txtDescicao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(jPanel2Layout.createSequentialGroup()
-                                .add(jLabel7)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(cntMaxEntradas, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 55, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(140, 140, 140)))
+                                .add(jLabel6))))
+                    .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
+                            .add(jLabel7)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(cntMaxEntradas, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 55, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jLabel2)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(spnFinal, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
+                            .add(jLabel3)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(txtDescicao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 161, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(36, 36, 36)
+                            .add(jLabel1)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(spnIni, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -186,11 +230,16 @@ public class ManutencaoEventos extends javax.swing.JFrame {
                 .add(6, 6, 6)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel3)
-                    .add(txtDescicao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(txtDescicao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel1)
+                    .add(spnIni, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel7)
-                    .add(cntMaxEntradas, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(cntMaxEntradas, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(jLabel2)
+                        .add(spnFinal, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel6)
@@ -204,8 +253,18 @@ public class ManutencaoEventos extends javax.swing.JFrame {
         );
 
         bttCancelar.setText("Cancelar");
+        bttCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttCancelarActionPerformed(evt);
+            }
+        });
 
         bttSalvar.setText("Salvar / Cadastrar");
+        bttSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttSalvarActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(142, 134, 134));
@@ -257,7 +316,89 @@ public class ManutencaoEventos extends javax.swing.JFrame {
 
     private void bttAdicionarObrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttAdicionarObrasActionPerformed
         // TODO add your handling code here:
+        
+        SelecionaObra o = new SelecionaObra(content);
+        o.setVisible(true);
     }//GEN-LAST:event_bttAdicionarObrasActionPerformed
+
+    private void tblEventosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEventosMouseClicked
+        // TODO add your handling code here:
+        
+        int linha = tblEventos.getSelectedRow();//pegando linha selecionada
+        EventoVO o = new EventoVO();
+        o.setDescricao(tblEventos.getValueAt(linha , 0).toString());
+        
+        
+        
+        try {
+            o = content.eventoDAO.buscar(o);
+        } catch (Exception ex) {
+            Logger.getLogger(ManutencaoObras.class.getName()).log(Level.SEVERE, null, ex);
+            o = null;
+        }
+        
+        
+        if(o != null)
+        {
+            txtDescicao.setText(o.getDescricao());
+            txtTexto1.setText(o.getTexto1());
+            txtTexto2.setText(o.getTexto2());
+            cntMaxEntradas.setValue(o.getMaxEntradas());
+            
+            buscarObrasExposicao();
+        }
+        
+    }//GEN-LAST:event_tblEventosMouseClicked
+
+    private void bttSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttSalvarActionPerformed
+        // TODO add your handling code here:
+        
+        
+         try{
+        Date c1 = (Date)spnIni.getValue();
+        Calendar cal1= Calendar.getInstance();
+        cal1.set(c1.getYear()+1900,c1.getMonth(),c1.getDate());
+        
+        
+        Date c2 = (Date)spnIni.getValue();
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(c2.getYear()+1900,c2.getMonth(),c2.getDate());
+        
+        EventoVO vo = new EventoVO();
+        
+        vo.setDataInicio(cal1);
+        vo.setDataFinal(cal2);
+        vo.setDescricao(txtDescicao.getText());
+        vo.setTexto1(txtTexto1.getText());
+        vo.setTexto2(txtTexto2.getText());
+        vo.setMaxEntradas((int) cntMaxEntradas.getValue());
+        
+        content.eventoDAO.alterar(vo);
+        
+        
+        
+            txtDescicao.setText("");
+            txtTexto1.setText("");
+            txtTexto2.setText("");
+            cntMaxEntradas.setValue(0);
+            
+            carregaEventos();
+        
+        }
+        catch(Exception ex)
+        {
+        //porra n guento mais...
+           return;
+        }
+         
+         
+    }//GEN-LAST:event_bttSalvarActionPerformed
+
+    private void bttCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        
+    }//GEN-LAST:event_bttCancelarActionPerformed
     
     /**
      * @param args the command line arguments
@@ -300,6 +441,8 @@ public class ManutencaoEventos extends javax.swing.JFrame {
     private javax.swing.JButton bttRemoverObras;
     private javax.swing.JButton bttSalvar;
     private javax.swing.JSpinner cntMaxEntradas;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -312,6 +455,8 @@ public class ManutencaoEventos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSpinner spnFinal;
+    private javax.swing.JSpinner spnIni;
     private javax.swing.JTable tblEventos;
     private javax.swing.JTable tblObras;
     private javax.swing.JTextField txtDescicao;
@@ -324,6 +469,74 @@ public class ManutencaoEventos extends javax.swing.JFrame {
     
         
         
+    }
+
+    private void carregaEventos() {
+        
+        DefaultTableModel model =  (DefaultTableModel) tblEventos.getModel();
+            List<EventoVO> lista = null;
+        try {
+              lista= content.eventoDAO.lista("");
+        } catch (Exception ex) {
+            Logger.getLogger(ManutencaoObras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(lista != null)
+        for(EventoVO o : lista)
+        {
+            String[] s = new String[]{o.getDescricao(),o.getTexto1(),o.getTexto2(),Util.DateTimeString(o.getDataInicio()),Util.DateTimeString(o.getDataFinal()),o.getMaxEntradas()+""};
+            model.addRow(s);
+        }
+        
+        
+    }
+
+    private void buscarObrasExposicao() 
+    {
+       
+           try {
+          String  sql = "select Obra.* from Obra join Exposicao where Obra.idObra = Exposicao.idObra ";
+        
+        Statement st = null;
+    //Contem o resultado de um SELECT
+        ResultSet rs = null;
+        st =content.bf.getConexao().createStatement();
+        rs = st.executeQuery(sql);
+        List<ObraVO> listaEvento = new ArrayList();
+     
+            if(rs.next())
+            {
+                //existe
+                content.bf.getConexao().close();
+                do
+                    listaEvento.add(new ObraVO(rs.getInt(1), rs.getString(2), rs.getInt(3),rs.getString(4),rs.getString(5),rs.getString(6)));
+                while(rs.next()); 
+                
+                content.getEventoAtual().setObras((ArrayList<ObraVO>) listaEvento);
+                
+                atualizaObras();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManutencaoEventos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ManutencaoEventos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        
+        
+    }
+
+    private void atualizaObras() {
+        
+       ObraVO[] o = content.getEventoAtual().getObras();
+        DefaultTableModel model =  (DefaultTableModel) tblObras.getModel();
+        model.setRowCount(0);
+        for(ObraVO ob : o)
+        {
+            String[] s = new String[]{ob.getDescricao(),ob.getIdTipo()+""};
+            model.addRow(s);
+        }
     }
     
 }

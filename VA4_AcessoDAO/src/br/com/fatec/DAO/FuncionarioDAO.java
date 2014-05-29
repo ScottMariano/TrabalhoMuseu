@@ -65,27 +65,44 @@ public class FuncionarioDAO implements DAO <FuncionarioVO>{
 
     @Override
     public void alterar(FuncionarioVO obj) throws SQLException, Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
+        obj = buscar(obj);
+        
+                  sql = "UPDATE funcionarios SET cpf = '" + obj.getCPF()
+                 +  "', nome = '" + obj.getNome()
+                 +  "' endereco = '" + obj.getEndereco()
+                 +  "' email '= " + obj.getEmail();
+                  sql += "' where idFuncionario = " + obj.getIdFuncionario();
+              
+        //Criar o statement e abrir a conexao com o banco
+        st = bf.getConexao().createStatement();
+        if(st.executeUpdate(sql) == 0) { //nao afetou ninguem
+            bf.getConexao().close();
+            throw new Exception("Não Alterou expediente");
+        } else
+            bf.getConexao().close(); //fecha a conexao
+        
+        
     }
 
     @Override
     public FuncionarioVO buscar(FuncionarioVO obj) throws SQLException, Exception {
-         sql = "select * from login where ";
+         sql = "select * from funcionarios where ";
         
         if(obj.getIdFuncionario() > 0)
             sql += "idFuncionario = " + obj.getIdFuncionario() + " | ";  
         if(obj.getIdFuncao()> 0)
             sql += "idFuncao = " + obj.getIdFuncao() + " | ";
         if(!obj.getCPF().isEmpty())
-            sql += "CPF like " + obj.getCPF()+ " | ";
+            sql += "CPF like '" + obj.getCPF()+ "' | ";
         if(!obj.getNome().isEmpty())
-            sql += "Nome like " + obj.getNome()+ " | ";
+            sql += "Nome like '" + obj.getNome()+ "%' | ";
         if(!obj.getTelefone().isEmpty())
-            sql += "Telefone like " + obj.getTelefone()+ " | ";
+            sql += "Telefone like '" + obj.getTelefone()+ "' | ";
         if(!obj.getEndereco().isEmpty())
-            sql += "Endereco like " + obj.getEndereco()+ " | ";
+            sql += "Endereco like '" + obj.getEndereco()+ "' | ";
           if(!obj.getEmail().isEmpty())
-            sql += "Email like " + obj.getEmail()+ " | ";
+            sql += "Email like '" + obj.getEmail()+ "' | ";
                     
         if(sql.contains("|"))
             sql = sql.substring(0, sql.length()-2);
@@ -98,7 +115,7 @@ public class FuncionarioDAO implements DAO <FuncionarioVO>{
         { 
             //existe
             bf.getConexao().close();
-                return new FuncionarioVO(rs.getInt(0), rs.getInt(1), rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5), rs.getString(6));
+                return new FuncionarioVO(rs.getInt(1), rs.getInt(2), rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6), rs.getString(7));
         } 
         else
         {
@@ -122,7 +139,7 @@ public class FuncionarioDAO implements DAO <FuncionarioVO>{
             //existe
             bf.getConexao().close();
             do
-                listaFuncionarios.add(new FuncionarioVO(rs.getInt("idFuncionario"), rs.getInt("idFuncao"), rs.getString("CPF"),rs.getString("Nome"),rs.getString("Telefone"),rs.getString("Endereco"), rs.getString("Email")));
+                listaFuncionarios.add(new FuncionarioVO(rs.getInt(1), rs.getInt(2), rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6), rs.getString(7)));
             while(rs.next());
         } 
         else

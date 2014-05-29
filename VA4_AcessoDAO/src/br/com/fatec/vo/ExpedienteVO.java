@@ -25,7 +25,8 @@ public class ExpedienteVO {
     {
         this.setIdExpediente(idExpediente);
         this.setInteiras(Inteiras);
-        this.setIdEvento(Meias);
+        this.setMeias(Meias);
+        this.setIdEvento(idEvento);
         this.setData(data);
         
     }

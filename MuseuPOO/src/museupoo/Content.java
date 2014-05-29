@@ -14,8 +14,12 @@ import br.com.fatec.DAO.LoginDAO;
 import br.com.fatec.DAO.ObraDAO;
 import br.com.fatec.banco.BancoFactory;
 import br.com.fatec.vo.EventoVO;
+import br.com.fatec.vo.ExpedienteVO;
 import br.com.fatec.vo.FuncionarioVO;
 import java.sql.Connection;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,10 +41,12 @@ public class Content
    private EventoVO EventoAtual;
    
    
+   private ExpedienteVO ExpedienteAtual;
+   private Calendar DataSelecionada;
+   
     public Content(BancoFactory bf)
     {
         this.bf = bf;
-        
         eventoDAO = new EventoDAO(bf);
         expedienteDAO = new ExpedienteDAO(bf);
         funcaoDAO = new FuncaoDAO(bf);
@@ -76,6 +82,49 @@ public class Content
      */
     public void setEventoAtual(EventoVO EventoAtual) {
         this.EventoAtual = EventoAtual;
+    }
+
+    /**
+     * @return the ExpedienteAtual
+     */
+    public ExpedienteVO getExpedienteAtual() 
+    {
+        return ExpedienteAtual;
+    }
+
+    /**
+     * @param ExpedienteAtual the ExpedienteAtual to set
+     */
+    public void setExpedienteAtual(ExpedienteVO ExpedienteAtual) 
+    {
+     try 
+     {
+              
+        if(ExpedienteAtual != null && ExpedienteAtual.getIdEvento() > 0)
+          
+         expedienteDAO.alterar(ExpedienteAtual);
+        
+       
+          
+        this.ExpedienteAtual = ExpedienteAtual;
+        if(ExpedienteAtual != null && ExpedienteAtual.getIdEvento() > 0)
+            expedienteDAO.alterar(ExpedienteAtual); 
+     } catch (Exception ex) 
+        {
+            Logger.getLogger(Content.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Calendar getDataSelecionada() 
+    {
+        return DataSelecionada;
+    }
+
+    /**
+     * @param DataSelecionada the DataSelecionada to set
+     */
+    public void setDataSelecionada(Calendar DataSelecionada) {
+        this.DataSelecionada = DataSelecionada;
     }
     
     

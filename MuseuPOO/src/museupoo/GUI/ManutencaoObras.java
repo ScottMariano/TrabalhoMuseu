@@ -2,15 +2,28 @@
 
 package museupoo.GUI;
 
+import br.com.fatec.vo.ObraVO;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import museupoo.Content;
+
 public class ManutencaoObras extends javax.swing.JFrame {
-    
+    Content content;
     /**
      * Creates new form ContactEditor
      */
     public ManutencaoObras() {
         initComponents();
         setFocusSequence();
-      
+        
+    }
+
+    ManutencaoObras(Content content) {
+        this();
+        this.content = content;
+        carregaObras();
         
     }
     
@@ -36,7 +49,7 @@ public class ManutencaoObras extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        txtDescricaoObra = new javax.swing.JTextField();
+        txtDescricaoTipo = new javax.swing.JTextField();
         txtPorteObra = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         bttCadastrarObra = new javax.swing.JButton();
@@ -56,7 +69,7 @@ public class ManutencaoObras extends javax.swing.JFrame {
         bttSalvar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("E-mail Contacts");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(" Obras "));
@@ -67,14 +80,14 @@ public class ManutencaoObras extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Descriçao", "Tipo", "Porte", "Texto 1", "Texto 2", "Proprietario"
+                "Descriçao", "Tipo", "Porte", "Proprietario"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -85,15 +98,28 @@ public class ManutencaoObras extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblObras.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblObrasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblObras);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(" Filtro "));
+        jPanel4.setEnabled(false);
+
+        cmbEvento.setEnabled(false);
 
         jLabel1.setText("Evento:");
+        jLabel1.setEnabled(false);
 
         jLabel2.setText("Tipo Obra");
+        jLabel2.setEnabled(false);
+
+        cmbTipoObraFiltro.setEnabled(false);
 
         bttFiltar.setText("Filtar");
+        bttFiltar.setEnabled(false);
         bttFiltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bttFiltarActionPerformed(evt);
@@ -101,6 +127,7 @@ public class ManutencaoObras extends javax.swing.JFrame {
         });
 
         bttLimparFiltro.setText("Limpar Filtro");
+        bttLimparFiltro.setEnabled(false);
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -157,6 +184,11 @@ public class ManutencaoObras extends javax.swing.JFrame {
         jLabel13.setText("Porte:");
 
         bttCadastrarObra.setText("Cadstrar");
+        bttCadastrarObra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttCadastrarObraActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -171,7 +203,7 @@ public class ManutencaoObras extends javax.swing.JFrame {
                             .add(jLabel12))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(txtDescricaoObra)
+                            .add(txtDescricaoTipo)
                             .add(jPanel3Layout.createSequentialGroup()
                                 .add(txtPorteObra, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 125, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .add(0, 0, Short.MAX_VALUE))))
@@ -186,7 +218,7 @@ public class ManutencaoObras extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel12)
-                    .add(txtDescricaoObra, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(txtDescricaoTipo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel13)
@@ -199,6 +231,8 @@ public class ManutencaoObras extends javax.swing.JFrame {
         jLabel3.setText("Descriçao");
 
         jLabel4.setText("Tipo:");
+
+        cmbTipoObra.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Médio", "Grande" }));
 
         jLabel5.setText("Texto 1");
 
@@ -221,7 +255,7 @@ public class ManutencaoObras extends javax.swing.JFrame {
             .add(jPanel2Layout.createSequentialGroup()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(18, Short.MAX_VALUE)
+                        .addContainerGap(19, Short.MAX_VALUE)
                         .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 247, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 259, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -279,8 +313,18 @@ public class ManutencaoObras extends javax.swing.JFrame {
         );
 
         bttCanelar.setText("Cancelar");
+        bttCanelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttCanelarActionPerformed(evt);
+            }
+        });
 
         bttSalvar.setText("Salvar / Cadastrar");
+        bttSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttSalvarActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(142, 134, 134));
@@ -333,6 +377,72 @@ public class ManutencaoObras extends javax.swing.JFrame {
     private void bttFiltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttFiltarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bttFiltarActionPerformed
+
+    private void bttCadastrarObraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCadastrarObraActionPerformed
+        // TODO add your handling code here:
+        
+        
+        
+    }//GEN-LAST:event_bttCadastrarObraActionPerformed
+
+    private void tblObrasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblObrasMouseClicked
+        // TODO add your handling code here:
+        
+        int linha = tblObras.getSelectedRow();//pegando linha selecionada
+        ObraVO o = new ObraVO();
+        o.setDescricao(tblObras.getValueAt(linha , 0).toString());
+        o.setProprietario(tblObras.getValueAt(linha , 1).toString());
+        
+        
+        try {
+            o = content.obraDAO.buscar(o);
+        } catch (Exception ex) {
+            Logger.getLogger(ManutencaoObras.class.getName()).log(Level.SEVERE, null, ex);
+            o = null;
+        }
+        
+        
+        if(o != null)
+        {
+            txtDescricaoEvento.setText(o.getDescricao());
+            txtProprietario.setText(o.getProprietario());
+            txtTexto1.setText(o.getTexto1());
+            txtTexto2.setText(o.getTexto2());
+            cmbEvento.setSelectedIndex(1);
+            
+        }
+        
+    }//GEN-LAST:event_tblObrasMouseClicked
+
+    private void bttCanelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCanelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_bttCanelarActionPerformed
+
+    private void bttSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttSalvarActionPerformed
+        // TODO add your handling code here:
+        
+        ObraVO o = new ObraVO();
+        o.setDescricao(txtDescricaoEvento.getText());
+        o.setProprietario(txtProprietario.getText());
+        o.setTexto1(txtTexto1.getText());
+        o.setTexto2(txtTexto2.getText());
+        o.setIdTipo(1);
+        
+        try {
+            content.obraDAO.alterar(o);
+            
+            txtDescricaoEvento.setText("");
+            txtProprietario.setText("");
+            txtTexto1.setText("");
+            txtTexto2.setText("");
+            cmbEvento.setSelectedIndex(1);
+            carregaObras();
+            
+        } catch (Exception ex) {
+            Logger.getLogger(ManutencaoObras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bttSalvarActionPerformed
     
     /**
      * @param args the command line arguments
@@ -398,7 +508,7 @@ public class ManutencaoObras extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblObras;
     private javax.swing.JTextField txtDescricaoEvento;
-    private javax.swing.JTextField txtDescricaoObra;
+    private javax.swing.JTextField txtDescricaoTipo;
     private javax.swing.JTextField txtPorteObra;
     private javax.swing.JTextField txtProprietario;
     private javax.swing.JTextArea txtTexto1;
@@ -409,6 +519,25 @@ public class ManutencaoObras extends javax.swing.JFrame {
        
     
         
+        
+    }
+
+    private void carregaObras() {
+        
+        DefaultTableModel model =  (DefaultTableModel) tblObras.getModel();
+            List<ObraVO> lista = null;
+        try {
+              lista= content.obraDAO.lista("");
+        } catch (Exception ex) {
+            Logger.getLogger(ManutencaoObras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(lista != null)
+        for(ObraVO o : lista)
+        {
+            String[] s = new String[]{o.getDescricao(),"Carro","Medio", o.getProprietario()};
+            model.addRow(s);
+        }
         
     }
     

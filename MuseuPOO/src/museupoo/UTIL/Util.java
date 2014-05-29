@@ -6,8 +6,10 @@
 
 package museupoo.UTIL;
 
+import java.awt.Component;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.JPanel;
 
 /**
  *
@@ -28,6 +30,13 @@ public class Util
 
     public static String DateStringSQL(Calendar date) 
     {
-       return String.format("%04d",date.get(Calendar.YEAR)) + "-" + String.format("%02d", date.get(Calendar.MONTH))+ "-"  + String.format("%02d", date.get(Calendar.DATE));
+       return String.format("%04d",date.get(Calendar.YEAR)) + "-" + String.format("%02d", date.get(Calendar.MONTH) + 1)+ "-"  + String.format("%02d", date.get(Calendar.DATE));
+    }
+
+    public static void PnlSetEnable(JPanel pnl, boolean b) {
+        pnl.setEnabled(b);
+        for(Component j : pnl.getComponents())
+           j.setEnabled(b);
+    
     }
 }

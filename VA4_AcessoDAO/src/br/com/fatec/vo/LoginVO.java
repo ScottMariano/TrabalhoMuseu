@@ -9,7 +9,7 @@ package br.com.fatec.vo;
  * @author Viotti
  */
 public class LoginVO {
-    private int IdFuncionario;
+    private int idLogin;
     private String Login,Senha;
     private boolean Ativo;
 
@@ -20,9 +20,9 @@ public class LoginVO {
         
     }
 
-    public LoginVO(int idFuncionario, String Login, String Senha,boolean Ativo) 
+    public LoginVO(int idLogin, String Login, String Senha,boolean Ativo) 
     {
-        this.setIdFuncionario(idFuncionario);
+        this.setIdLogin(idLogin);
         this.setLogin(Login);
         this.setSenha(Senha);
         this.setAtivo(Ativo);
@@ -31,15 +31,15 @@ public class LoginVO {
     /**
      * @return the idLogin
      */
-    public int getIdFuncionario() {
-        return IdFuncionario;
+    public int getIdLogin() {
+        return idLogin;
     }
 
     /**
      * @param idLogin the idLogin to set
      */
-    public void setIdFuncionario(int idLogin) {
-        this.IdFuncionario = idLogin;
+    public void setIdLogin(int idLogin) {
+        this.idLogin = idLogin;
     }
 
     /**

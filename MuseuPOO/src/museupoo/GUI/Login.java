@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import museupoo.Content;
 
 /**
@@ -32,8 +33,8 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
+        this.setLocationRelativeTo(null);
         initComponents(); 
-        
         content = new Content(new BancoFactory("localhost", "museuautomovel", "root", "", 3306));
     }
 
@@ -142,6 +143,7 @@ public class Login extends javax.swing.JFrame {
                 //inicia menu principal 
               MenuPrincipal menu =  new MenuPrincipal(content);
               dispose();
+              menu.setLocationRelativeTo(null);
               menu.setVisible(true);
               
               
@@ -153,6 +155,8 @@ public class Login extends javax.swing.JFrame {
             }
        
        }
+       else
+           JOptionPane.showMessageDialog(null, "Login incorreto");
         
         
         

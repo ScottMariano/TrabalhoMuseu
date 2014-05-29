@@ -47,7 +47,7 @@ public class EventoVO {
     
     public ObraVO getObraById(int idObra) 
     {
-        for(ObraVO o : Obras)
+        for(ObraVO o : getObras())
             if(o.getIdObra() == idObra)
                 return o;
         return null;
@@ -149,6 +149,13 @@ public class EventoVO {
      */
     public void setDataFinal(Calendar DataFinal) {
         this.DataFinal = DataFinal;
+    }
+
+    /**
+     * @param Obras the Obras to set
+     */
+    public void setObras(ArrayList<ObraVO> Obras) {
+        this.Obras = Obras;
     }
 
     

@@ -6,7 +6,6 @@ package br.com.fatec.DAO;
 
 import br.com.fatec.banco.BancoFactory;
 import br.com.fatec.vo.FuncaoVO;
-import br.com.fatec.vo.LoginVO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,7 +16,7 @@ import java.util.List;
  *
  * @author Viotti
  */
-public class LoginDAO implements DAO <LoginVO>{
+public class FuncaoDAO implements DAO <FuncaoVO>{
 
     //Contem o comando em SQL
     private Statement st = null;
@@ -27,13 +26,13 @@ public class LoginDAO implements DAO <LoginVO>{
     //Contem a conexao com o Banco
     private BancoFactory bf = null;
     //Auxiliar para ClienteVO
-    private LoginVO login = null;
+    private FuncaoVO cli = null;
     
     /**
      * Construtor que recebe o banco já conectado
      * @param bf 
      */
-    public LoginDAO(BancoFactory bf){
+    public FuncaoDAO(BancoFactory bf){
         this.bf = bf;
     }
     
@@ -44,42 +43,39 @@ public class LoginDAO implements DAO <LoginVO>{
      * @throws Exception - Erro interno no método
      */
     @Override
-    public void adicionar(LoginVO obj) throws SQLException, Exception {
-        sql = "insert into login ( Login, Senha, Ativo ) values (" +
-                obj.getLogin()+ ", '" + obj.getSenha() + 
-                "', 1)";
+    public void adicionar(FuncaoVO obj) throws SQLException, Exception {
+        sql = "insert into funcao (descricao, privilegio) values ( " +
+                "'" + obj.getDescricao()+"' , " + obj.getPrivilegio()+ " )";
         
         //Criar o statement e abrir a conexao com o banco
         st = bf.getConexao().createStatement();
         if(st.executeUpdate(sql) == 0) { //nao afetou ninguem
             bf.getConexao().close();
-            throw new Exception("Não Incluiu o Login");
+            throw new Exception("Não Incluiu a funcao");
         } else
             bf.getConexao().close(); //fecha a conexao
     }
 
     @Override
-    public void remover(LoginVO obj) throws SQLException, Exception {
+    public void remover(FuncaoVO obj) throws SQLException, Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void alterar(LoginVO obj) throws SQLException, Exception {
+    public void alterar(FuncaoVO obj) throws SQLException, Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public LoginVO buscar(LoginVO obj) throws SQLException, Exception {
-        sql = "select * from login where ";
+    public FuncaoVO buscar(FuncaoVO obj) throws SQLException, Exception {
+        sql = "select * from funcao where ";
         
-        if(obj.getIdFuncionario()> 0)
-            sql += "idFuncionario = " + obj.getIdFuncionario() + " | ";
-        if(!obj.getLogin().isEmpty())
-            sql += "Descricao like " + obj.getLogin()+ " | ";
-          if(!obj.getLogin().isEmpty())
-            sql += "Descricao like " + obj.getSenha()+ " | ";
-        if(obj.isAtivo())
-            sql += "Privilegio = 1";
+        if(obj.getIdFuncao() > 0)
+            sql += "idFuncao = " + obj.getIdFuncao() + " | ";
+        if(!obj.getDescricao().isEmpty())
+            sql += "Descricao like " + obj.getDescricao()+ " | ";
+        if(obj.getPrivilegio() > 0)
+            sql += "Privilegio = " + obj.getPrivilegio() + " | ";
                     
         if(sql.contains("|"))
             sql = sql.substring(0, sql.length()-2);
@@ -92,7 +88,7 @@ public class LoginDAO implements DAO <LoginVO>{
         { 
             //existe
             bf.getConexao().close();
-                return new LoginVO(rs.getInt(0), rs.getString(1), rs.getString(2), rs.getBoolean(3));
+            return new FuncaoVO(rs.getInt(1), rs.getString(2), rs.getInt(3));
         } 
         else
         {
@@ -101,23 +97,21 @@ public class LoginDAO implements DAO <LoginVO>{
     }
 
     @Override
-    public List<LoginVO> lista(String criterio) throws SQLException, Exception {
-       
-        if(criterio == "")
-            sql = "select * from login";
+    public List<FuncaoVO> lista(String criterio) throws SQLException, Exception {
+               
+        if(criterio.isEmpty())
+            sql = "select * from funcao";
         else
-            sql = "select * from login where " + criterio;
-        
-        
+            sql = "select * from funcao where " + criterio;
         st = bf.getConexao().createStatement();
         rs = st.executeQuery(sql);
-        List<LoginVO> listaLogin = new ArrayList();
+        List<FuncaoVO> listaFuncao = new ArrayList();
         if(rs.next()) 
         { 
             //existe
             bf.getConexao().close();
             do
-                listaLogin.add(new LoginVO(rs.getInt("idFuncionario"), rs.getString("Login"), rs.getString("Senha"), rs.getBoolean("Ativo")));
+                listaFuncao.add(new FuncaoVO(rs.getInt(1), rs.getString(2), rs.getInt(3)));
             while(rs.next());
         } 
         else
@@ -125,8 +119,7 @@ public class LoginDAO implements DAO <LoginVO>{
             return null;
         }
         
-        return listaLogin;
-        
+        return listaFuncao;
     }
     
 }

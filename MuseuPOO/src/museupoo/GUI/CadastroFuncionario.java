@@ -30,16 +30,31 @@
 
 package museupoo.GUI;
 
+import br.com.fatec.vo.FuncaoVO;
+import br.com.fatec.vo.FuncionarioVO;
+import br.com.fatec.vo.LoginVO;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import museupoo.Content;
+
 public class CadastroFuncionario extends javax.swing.JFrame {
     
+    Content content;
     /**
      * Creates new form ContactEditor
      */
     public CadastroFuncionario() {
         initComponents();
         setFocusSequence();
-      
+        carregaCmbCargo();
         
+    }
+
+    CadastroFuncionario(Content content) {
+        this();
+        this.content = content;
     }
     
     /** This method is called from within the constructor to
@@ -53,9 +68,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         txtNome1 = new javax.swing.JTextField();
-        txtNome2 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtTelefone = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -81,16 +94,13 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         bttCancelar = new javax.swing.JButton();
         bttSalvar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("E-mail Contacts");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Manutenção de Funcionarios");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(" Dados Pessoais "));
         jPanel1.setName(""); // NOI18N
 
-        jLabel1.setText("Primeiro Nome:");
-
-        jLabel2.setText("Ultimo Nome:");
-        jLabel2.setToolTipText("");
+        jLabel1.setText("Nome:");
 
         jLabel3.setText("Telefone:");
 
@@ -107,6 +117,11 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         jLabel5.setText("CPF:");
 
         bttBuscar.setText("Buscar");
+        bttBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttBuscarActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -125,23 +140,14 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(txtEndereco)
                             .add(jPanel1Layout.createSequentialGroup()
-                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                    .add(org.jdesktop.layout.GroupLayout.LEADING, txtTelefone)
-                                    .add(txtNome1)
-                                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup()
-                                        .add(txtCpf, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 148, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .add(0, 0, Short.MAX_VALUE)))
-                                .add(18, 18, 18)
-                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                    .add(jPanel1Layout.createSequentialGroup()
-                                        .add(jLabel2)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(txtNome2))
-                                    .add(jPanel1Layout.createSequentialGroup()
-                                        .add(0, 0, Short.MAX_VALUE)
-                                        .add(jLabel4)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(txtEmail, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 178, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))))
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(txtTelefone)
+                                    .add(txtCpf))
+                                .add(37, 37, 37)
+                                .add(jLabel4)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(txtEmail, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 178, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(txtNome1)))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(bttBuscar)))
@@ -152,9 +158,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             .add(jPanel1Layout.createSequentialGroup()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
-                    .add(txtNome2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(txtNome1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel2))
+                    .add(txtNome1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel3)
@@ -188,6 +192,11 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         jLabel13.setText("Privilegio:");
 
         txtCadastrar.setText("Cadstrar");
+        txtCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCadastrarActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -274,8 +283,18 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         );
 
         bttCancelar.setText("Cancelar");
+        bttCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttCancelarActionPerformed(evt);
+            }
+        });
 
         bttSalvar.setText("Salvar / Cadastrar");
+        bttSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttSalvarActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -319,6 +338,63 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     private void txtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEnderecoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEnderecoActionPerformed
+
+    private void bttBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttBuscarActionPerformed
+        // TODO add your handling code here:
+        
+        FuncionarioVO fun = new FuncionarioVO(0, 0, txtCpf.getText(),txtNome1.getText(), txtTelefone.getText(), txtEndereco.getText(), txtEmail.getText());
+        
+        try {
+            fun = content.funcionarioDAO.buscar(fun);
+        } catch (Exception ex) {
+            Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            fun = null;
+        }
+        
+        if(fun != null)
+        {
+            txtNome1.setText(fun.getNome());
+            txtCpf.setText(fun.getCPF());
+            txtEmail.setText(fun.getEmail());
+            txtTelefone.setText(fun.getTelefone());
+            txtEndereco.setText(fun.getEndereco());
+            
+            
+            
+        }
+        
+    }//GEN-LAST:event_bttBuscarActionPerformed
+
+    private void txtCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCadastrarActionPerformed
+        // TODO add your handling code here:
+        
+        FuncaoVO f = new FuncaoVO(0, txtDescricao.getText(), Integer.parseInt(txtPrivilegio.getText()));
+        
+        try 
+        {
+            content.funcaoDAO.adicionar(f);
+        } catch (Exception ex) {
+            Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        txtDescricao.setText("");
+        txtPrivilegio.setText("");
+        
+        carregaCmbCargo();
+    }//GEN-LAST:event_txtCadastrarActionPerformed
+
+    private void bttSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttSalvarActionPerformed
+        // TODO add your handling code here:
+       salvaFuncionario();
+       if(!txtLogin.getText().isEmpty())
+        salvaLogin();
+        
+    }//GEN-LAST:event_bttSalvarActionPerformed
+
+    private void bttCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_bttCancelarActionPerformed
     
     /**
      * @param args the command line arguments
@@ -366,7 +442,6 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -382,7 +457,6 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtLogin;
     private javax.swing.JTextField txtNome1;
-    private javax.swing.JTextField txtNome2;
     private javax.swing.JTextField txtPrivilegio;
     private javax.swing.JTextField txtSenha;
     private javax.swing.JTextField txtTelefone;
@@ -393,6 +467,97 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     
         
         
+    }
+
+    private void carregaCmbCargo()
+    {
+        try {
+            
+         List<FuncaoVO> lista = content.funcaoDAO.lista("");     
+            
+            if(!lista.isEmpty())
+            {
+                
+                cmbCargo.removeAllItems();
+                    for(FuncaoVO v : lista)
+                    {
+                        int i = lista.indexOf(v);
+                        FuncaoVO aux = lista.get(i);
+                        String item = aux.getDescricao();
+                        cmbCargo.addItem(item);
+                    }
+            }
+        } catch (SQLException ex) 
+        {
+           
+            
+        } 
+        catch (Exception ex) {
+            
+            
+        }
+        
+    }
+
+    private void salvaFuncionario() {
+         //verifica se existe funcionario
+        
+        FuncionarioVO f = new FuncionarioVO(0, 0, txtCpf.getText(),txtNome1.getText(), txtTelefone.getText(), txtEndereco.getText(), txtEmail.getText());
+        
+        try {
+            f = content.funcionarioDAO.buscar(f);
+        } catch (Exception ex) {
+            Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            f = null;
+        }
+        
+        if(f != null)//existe, alterar
+        {
+            try {
+                content.funcionarioDAO.alterar(f);
+            } catch (Exception ex) {
+                Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }    
+        else
+        {
+            try {
+                content.funcionarioDAO.adicionar(f);
+            } catch (Exception ex) {
+                Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    
+    }
+
+    private void salvaLogin() {
+        
+         LoginVO f = new LoginVO(0, txtLogin.getText(), txtSenha.getText(), true);
+        
+        try {
+            f = content.loginDAO.buscar(f);
+        } catch (Exception ex) {
+            Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            f = null;
+        }
+        
+        if(f != null)//existe, alterar
+        {
+            try {
+                content.loginDAO.alterar(f);
+            } catch (Exception ex) {
+                Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }    
+        else
+        {
+            try {
+                content.loginDAO.adicionar(f);
+            } catch (Exception ex) {
+                Logger.getLogger(CadastroFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+    
     }
     
 }

@@ -7,11 +7,16 @@
 package museupoo.GUI;
 
 import br.com.fatec.vo.EventoVO;
+import br.com.fatec.vo.ExpedienteVO;
+import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.Timer;
 import museupoo.Content;
 import museupoo.UTIL.Util;
@@ -52,8 +57,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jFrame2 = new javax.swing.JFrame();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        bttOntem = new javax.swing.JButton();
-        bttAmanha = new javax.swing.JButton();
         bttHoje = new javax.swing.JButton();
         pnlEvento = new javax.swing.JPanel();
         lblDescricao = new javax.swing.JLabel();
@@ -65,7 +68,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         txtTexto1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtTexto2 = new javax.swing.JTextArea();
-        jPanel6 = new javax.swing.JPanel();
+        pnlEntradas = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -76,14 +79,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         bttPlusInteira = new javax.swing.JButton();
         bttPlusMeia = new javax.swing.JButton();
         bttMinusMeia = new javax.swing.JButton();
+        lblDataExpediente = new javax.swing.JLabel();
         jToggleButton1 = new javax.swing.JToggleButton();
         bttEditarEvento = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
         lblDataHora = new javax.swing.JLabel();
         lblAviso = new javax.swing.JLabel();
+        spnData = new javax.swing.JSpinner();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -121,20 +126,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Selecione a data:");
 
-        bttOntem.setText("Ontem");
-        bttOntem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttOntemActionPerformed(evt);
-            }
-        });
-
-        bttAmanha.setText("Amanha");
-        bttAmanha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttAmanhaActionPerformed(evt);
-            }
-        });
-
         bttHoje.setText("Hoje");
         bttHoje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -165,18 +156,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
         lblDataInicial.setText("Data Inicial:");
         lblDataInicial.setEnabled(pnlEvento.isEnabled());
 
+        txtTexto1.setEditable(false);
         txtTexto1.setColumns(20);
         txtTexto1.setRows(5);
         txtTexto1.setEnabled(pnlEvento.isEnabled());
         jScrollPane1.setViewportView(txtTexto1);
 
+        txtTexto2.setEditable(false);
         txtTexto2.setColumns(20);
         txtTexto2.setRows(5);
         txtTexto2.setEnabled(pnlEvento.isEnabled());
         jScrollPane2.setViewportView(txtTexto2);
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(" Entradas "));
-        jPanel6.setEnabled(pnlEvento.isEnabled());
+        pnlEntradas.setBorder(javax.swing.BorderFactory.createTitledBorder(" Entradas "));
+        pnlEntradas.setEnabled(pnlEvento.isEnabled());
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel8.setText("Inteiras:");
@@ -190,12 +183,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel10.setText("Total:");
         jLabel10.setEnabled(pnlEvento.isEnabled());
 
+        txtInteira.setEditable(false);
         txtInteira.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         txtInteira.setEnabled(pnlEvento.isEnabled());
 
+        txtMeia.setEditable(false);
         txtMeia.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         txtMeia.setEnabled(pnlEvento.isEnabled());
 
+        txtTotal.setEditable(false);
         txtTotal.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         txtTotal.setEnabled(pnlEvento.isEnabled());
 
@@ -204,72 +200,96 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         bttPlusInteira.setIcon(new javax.swing.ImageIcon(getClass().getResource("/museupoo/GUI/Imagem/plus.png"))); // NOI18N
         bttPlusInteira.setEnabled(pnlEvento.isEnabled());
+        bttPlusInteira.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttPlusInteiraActionPerformed(evt);
+            }
+        });
 
         bttPlusMeia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/museupoo/GUI/Imagem/plus.png"))); // NOI18N
         bttPlusMeia.setEnabled(pnlEvento.isEnabled());
+        bttPlusMeia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttPlusMeiaActionPerformed(evt);
+            }
+        });
 
         bttMinusMeia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/museupoo/GUI/Imagem/minus.png"))); // NOI18N
         bttMinusMeia.setEnabled(pnlEvento.isEnabled());
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+        lblDataExpediente.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblDataExpediente.setText("Data Expediente:");
+        lblDataExpediente.setEnabled(pnlEvento.isEnabled());
+
+        javax.swing.GroupLayout pnlEntradasLayout = new javax.swing.GroupLayout(pnlEntradas);
+        pnlEntradas.setLayout(pnlEntradasLayout);
+        pnlEntradasLayout.setHorizontalGroup(
+            pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEntradasLayout.createSequentialGroup()
+                .addGap(238, 238, 238)
+                .addComponent(lblDataExpediente)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlEntradasLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addGap(10, 10, 10)
                 .addComponent(txtInteira, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bttPlusInteira, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bttMinusInteira, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGroup(pnlEntradasLayout.createSequentialGroup()
                         .addGap(120, 120, 120)
                         .addComponent(jLabel9)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtMeia, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlEntradasLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bttPlusMeia, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bttMinusMeia, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGroup(pnlEntradasLayout.createSequentialGroup()
                         .addGap(116, 116, 116)
                         .addComponent(jLabel10)))
                 .addGap(18, 18, 18)
                 .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
+        pnlEntradasLayout.setVerticalGroup(
+            pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlEntradasLayout.createSequentialGroup()
+                .addComponent(lblDataExpediente)
+                .addGap(18, 18, 18)
+                .addGroup(pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlEntradasLayout.createSequentialGroup()
                         .addComponent(bttPlusMeia, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(bttMinusMeia, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addGap(3, 3, 3)
+                    .addGroup(pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlEntradasLayout.createSequentialGroup()
                             .addComponent(bttPlusInteira, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(29, 29, 29)
                             .addComponent(bttMinusInteira, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel6Layout.createSequentialGroup()
-                            .addGap(35, 35, 35)
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(pnlEntradasLayout.createSequentialGroup()
+                            .addGap(32, 32, 32)
+                            .addGroup(pnlEntradasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(txtInteira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel8)
                                 .addComponent(jLabel9)
                                 .addComponent(txtMeia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel10)
                                 .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/museupoo/GUI/Imagem/bttIniciar.png"))); // NOI18N
         jToggleButton1.setEnabled(pnlEvento.isEnabled());
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
 
         bttEditarEvento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/museupoo/GUI/Imagem/bttEditarEvento.png"))); // NOI18N
         bttEditarEvento.setEnabled(pnlEvento.isEnabled());
@@ -284,7 +304,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(pnlEventoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlEntradas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlEventoLayout.createSequentialGroup()
                         .addGroup(pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlEventoLayout.createSequentialGroup()
@@ -327,21 +347,21 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addComponent(lblDataInicial)
                     .addComponent(lblDataFinal))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTexto2)
-                    .addComponent(jLabel4))
+                .addGroup(pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTexto2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bttEditarEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlEventoLayout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(pnlEventoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblStatus)
+                    .addGroup(pnlEventoLayout.createSequentialGroup()
+                        .addComponent(pnlEntradas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -351,30 +371,39 @@ public class MenuPrincipal extends javax.swing.JFrame {
         lblAviso.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         lblAviso.setText("Sem eventos cadastrados...");
 
+        spnData.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.ERA));
+
+        jButton1.setText("Atualizar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addGap(255, 255, 255)
-                .addComponent(lblAviso, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(pnlEvento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(bttOntem)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(96, 96, 96)
                         .addComponent(bttHoje)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bttAmanha)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblDataHora)))
+                        .addComponent(lblDataHora))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(spnData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addGap(68, 68, 68)
+                        .addComponent(lblAviso, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -383,29 +412,29 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(lblDataHora)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                         .addComponent(lblAviso)
                         .addGap(3, 3, 3))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(bttAmanha)
-                                .addComponent(bttHoje))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(bttOntem)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(bttHoje)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(spnData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1))
+                        .addGap(0, 13, Short.MAX_VALUE)))
                 .addComponent(pnlEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
         );
 
         jMenu1.setText("Iniciar");
 
-        jMenuItem6.setText("Configurar Banco");
-        jMenu1.add(jMenuItem6);
-
         jMenuItem5.setText("Sair");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem5);
 
         jMenuBar1.add(jMenu1);
@@ -413,12 +442,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenu3.setText("Manutenção");
 
         jMenuItem2.setText("Funcionarios");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem2);
 
         jMenuItem3.setText("Evento");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem3);
 
         jMenuItem4.setText("Obra");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem4);
 
         jMenuBar1.add(jMenu3);
@@ -438,41 +482,115 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bttOntemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttOntemActionPerformed
-        // TODO add your handling code here:
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -1);
-        buscaEventoData(c);
-    }//GEN-LAST:event_bttOntemActionPerformed
-
     private void bttHojeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttHojeActionPerformed
         // TODO add your handling code here:
+        spnData.setValue(new Date());
         buscaEventoData(Calendar.getInstance());
     }//GEN-LAST:event_bttHojeActionPerformed
 
-    private void bttAmanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttAmanhaActionPerformed
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, 1);
-        buscaEventoData(c);
-    }//GEN-LAST:event_bttAmanhaActionPerformed
+        //verifica se existe expediente
+        
+       atualizaExpediente();
+        
+        
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void bttPlusInteiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttPlusInteiraActionPerformed
+        // TODO add your handling code here:
+        ExpedienteVO ex = content.getExpedienteAtual();
+        ex.setInteiras(ex.getInteiras() + 1);
+       
+        try {
+            content.expedienteDAO.alterar(ex);
+            content.setExpedienteAtual(ex);
+            
+            atualizaExpediente();
+        } catch (Exception ex1) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+    }//GEN-LAST:event_bttPlusInteiraActionPerformed
+
+    private void bttPlusMeiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttPlusMeiaActionPerformed
+        // TODO add your handling code here:
+        
+        ExpedienteVO ex = content.getExpedienteAtual();
+        ex.setMeias(ex.getMeias()+ 1);
+       
+        try {
+            content.expedienteDAO.alterar(ex); 
+            atualizaExpediente();
+        } catch (Exception ex1) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+    }//GEN-LAST:event_bttPlusMeiaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try{
+        Date c = (Date)spnData.getValue();
+        Calendar cal = Calendar.getInstance();
+        cal.set(c.getYear()+1900,c.getMonth(),c.getDate());
+        content.setDataSelecionada(cal);
+        buscaEventoData(cal);
+        
+        }
+        catch(Exception ex)
+        {
+        //porra n guento mais...
+           return;
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        
+        dispose();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        //manutenção Funcionarios
+        
+        
+        CadastroFuncionario c = new CadastroFuncionario(content);
+        c.setLocationRelativeTo(null);
+        c.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        
+        ManutencaoEventos c = new ManutencaoEventos(content);
+        c.setLocationRelativeTo(null);
+        c.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:,
+        
+        ManutencaoObras c = new ManutencaoObras(content);
+        c.setLocationRelativeTo(null);
+        c.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bttAmanha;
     private javax.swing.JButton bttEditarEvento;
     private javax.swing.JButton bttHoje;
     private javax.swing.JButton bttMinusInteira;
     private javax.swing.JButton bttMinusMeia;
-    private javax.swing.JButton bttOntem;
     private javax.swing.JButton bttPlusInteira;
     private javax.swing.JButton bttPlusMeia;
+    private javax.swing.JButton jButton1;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JFrame jFrame2;
     private javax.swing.JLabel jLabel10;
@@ -488,20 +606,21 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JLabel lblAviso;
+    private javax.swing.JLabel lblDataExpediente;
     private javax.swing.JLabel lblDataFinal;
     private javax.swing.JLabel lblDataHora;
     private javax.swing.JLabel lblDataInicial;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblTexto2;
+    private javax.swing.JPanel pnlEntradas;
     private javax.swing.JPanel pnlEvento;
+    private javax.swing.JSpinner spnData;
     private javax.swing.JTextField txtInteira;
     private javax.swing.JTextField txtMeia;
     private javax.swing.JTextArea txtTexto1;
@@ -530,24 +649,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         try 
         {
+            
+            Util.PnlSetEnable(pnlEntradas, false);
             EventoVO evAtual = content.eventoDAO.buscarData(Util.DateStringSQL(date));
             if(evAtual != null)
             {
                 lblAviso.setText("");
-                pnlEvento.setEnabled(true);
+                Util.PnlSetEnable(pnlEvento,true);
                 content.setEventoAtual(evAtual);
                 lblDescricao.setText("Descrição:"+ evAtual.getDescricao());
                 lblDataInicial.setText("Data Inicial:" + Util.DateTimeString(evAtual.getDataInicio()));
                 lblDataFinal.setText("Data Final:" + Util.DateTimeString(evAtual.getDataFinal()));
                 txtTexto1.setText(evAtual.getTexto1());
                 txtTexto2.setText(evAtual.getTexto2());
-                
             }
             else
             {
                 //sem evento para data
                 lblAviso.setText("Sem evento cadastrado...");
-                pnlEvento.setEnabled(false);
+                Util.PnlSetEnable(pnlEvento,false);
             }
             
         } catch (Exception ex) {
@@ -555,5 +675,40 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     
     
+    }
+
+    private void atualizaExpediente() {
+         
+        ExpedienteVO ex = new ExpedienteVO();
+        ex.setIdEvento(content.getEventoAtual().getIdEvento());
+        ex.setData(content.getDataSelecionada());
+        try 
+        {
+          
+                ex.setIdExpediente(0);
+                ex = content.expedienteDAO.buscar(ex);
+            
+            if(ex != null)
+            content.setExpedienteAtual(ex);
+            else
+            //sem expediente cadastrado
+            content.setExpedienteAtual(new ExpedienteVO(0,content.getDataSelecionada(),0,0,content.getEventoAtual().getIdEvento()));
+        
+        
+
+        //expediente carregado
+       Util.PnlSetEnable(pnlEntradas, true);  
+       lblDataExpediente.setText("Data Expediente: " + Util.DateTimeString(content.getExpedienteAtual().getData()));
+       
+       txtInteira.setText(content.getExpedienteAtual().getInteiras()+"");
+       txtMeia.setText(content.getExpedienteAtual().getMeias()+"");
+       txtTotal.setText(content.getExpedienteAtual().getInteiras() + content.getExpedienteAtual().getMeias() + "");
+       
+       
+       
+        }  catch (Exception ex1) 
+        {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex1);
+        }
     }
 }
